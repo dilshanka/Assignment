@@ -27,7 +27,7 @@ IoT Telemetry Ingestor
 
 A minimal NestJS application for ingesting, caching, and analyzing IoT telemetry data. This project accepts JSON readings, stores them in MongoDB Atlas, caches the latest reading in Redis, and triggers a webhook alert if thresholds are exceeded.
 
- Features
+📋 Features
 
 Ingest API: Validates and stores telemetry data (Temperature/Humidity).
 
@@ -37,11 +37,11 @@ Caching Strategy: Uses Redis to cache the "latest" device state for instant retr
 
 Analytics: Uses MongoDB Aggregation Pipeline for site summaries (min, max, avg, unique devices).
 
- Setup & Installation
+🚀 Setup & Installation
 
 1. Prerequisites
 
-Node.js 
+Node.js (v18 or later)
 
 npm (Node Package Manager)
 
@@ -89,7 +89,7 @@ npm run test
 npm run test:e2e
 
 
- Cloud Services & Architecture Notes
+🔗 Cloud Services & Architecture Notes
 
 MongoDB Atlas
 
@@ -139,14 +139,16 @@ Calculates averages and counts unique devices for a specific date range.
 curl "http://localhost:3000/api/v1/sites/site-A/summary?from=2025-09-01T00:00:00.000Z&to=2025-09-02T00:00:00.000Z"
 
 
-AI Usage Report
+🤖 AI Usage Report
 
 As per the assignment guidelines, here is how AI assistance was utilized in this project:
 
-I used AI to generate the initial NestJS boilerplate (Module, Controller, Service, DTOs) to accelerate the setup phase.
+Code Scaffolding: I used AI to generate the initial NestJS boilerplate (Module, Controller, Service, DTOs) to accelerate the setup phase. I reviewed the generated code to ensure it matched the required file structure.
 
-I used AI to construct the MongoDB Aggregation Pipeline for the /sites/:siteId/summary endpoint, specifically for correctly calculating averages and counting unique devices using $group and $addToSet.
+Aggregation Logic: I used AI to construct the MongoDB Aggregation Pipeline for the /sites/:siteId/summary endpoint, specifically for correctly calculating averages and counting unique devices using $group and $addToSet.
 
-I leveraged AI to resolve TypeScript strict mode errors, specifically regarding ioredis configuration (getOrThrow usage) and null-checks for the alert logic variables.
+Debugging & Typing: I leveraged AI to resolve TypeScript strict mode errors, specifically regarding ioredis configuration (getOrThrow usage) and null-checks for the alert logic variables.
 
-Test Generation: Due to limited experience with testing frameworks, I utilized AI to generate the initial Unit and E2E test suites and explain the testing logic.
+Cross-Platform Verification: I used AI to convert standard curl commands into Windows PowerShell syntax (Invoke-RestMethod) to verify the API endpoints locally without needing external tools.
+
+Test Generation: Due to limited experience with testing frameworks, I utilized AI to generate the initial Unit and E2E test suites and explain
