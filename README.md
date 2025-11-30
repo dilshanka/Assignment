@@ -59,18 +59,18 @@ cp .env.example .env
 
 Required Variables:
 
-# MongoDB Atlas Connection String
+*MongoDB Atlas Connection String
 MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/iot_db?retryWrites=true&w=majority
 
-# Redis Connection (Local or Cloud)
-# Example: redis://default:<password>@<endpoint>:<port>
+*Redis Connection (Local or Cloud)
+Example: redis://default:<password>@<endpoint>:<port>
 REDIS_URL=redis://localhost:6379
 
-# Webhook for Alerts
-# Generate a unique URL at [https://webhook.site/](https://webhook.site/)
+*Webhook for Alerts
+Generate a unique URL at [https://webhook.site/](https://webhook.site/)
 ALERT_WEBHOOK_URL=[https://webhook.site/YOUR-UNIQUE-UUID](https://webhook.site/YOUR-UNIQUE-UUID)
 
-# App Config
+App Config
 PORT=3000
 
 
@@ -143,12 +143,10 @@ curl "http://localhost:3000/api/v1/sites/site-A/summary?from=2025-09-01T00:00:00
 
 As per the assignment guidelines, here is how AI assistance was utilized in this project:
 
-Code Scaffolding: I used AI to generate the initial NestJS boilerplate (Module, Controller, Service, DTOs) to accelerate the setup phase. I reviewed the generated code to ensure it matched the required file structure.
+1. I used AI to generate the initial NestJS boilerplate (Module, Controller, Service, DTOs) to accelerate the setup phase. I reviewed the generated code to ensure it matched the required file structure.
 
-Aggregation Logic: I used AI to construct the MongoDB Aggregation Pipeline for the /sites/:siteId/summary endpoint, specifically for correctly calculating averages and counting unique devices using $group and $addToSet.
+2. I used AI to construct the MongoDB Aggregation Pipeline for the /sites/:siteId/summary endpoint, specifically for correctly calculating averages and counting unique devices using $group and $addToSet.
 
-Debugging & Typing: I leveraged AI to resolve TypeScript strict mode errors, specifically regarding ioredis configuration (getOrThrow usage) and null-checks for the alert logic variables.
+3. I leveraged AI to resolve TypeScript strict mode errors, specifically regarding ioredis configuration (getOrThrow usage) and null-checks for the alert logic variables.
 
-Cross-Platform Verification: I used AI to convert standard curl commands into Windows PowerShell syntax (Invoke-RestMethod) to verify the API endpoints locally without needing external tools.
-
-Test Generation: Due to limited experience with testing frameworks, I utilized AI to generate the initial Unit and E2E test suites and explain
+4. Test Generation: Due to limited experience with testing frameworks, I utilized AI to generate the initial Unit and E2E test suites and explain
