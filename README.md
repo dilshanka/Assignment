@@ -1,152 +1,93 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
 IoT Telemetry Ingestor
+<p align="center"> <a href="https://nestjs.com" target="_blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a> </p> <p align="center"> A progressive <a href="https://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications. </p> <p align="center"> <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a> <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a> <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a> <a href="https://circleci.com/gh/nestjs/nest"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a> <a href="https://discord.gg/G7Qnnhy"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord" /></a> <a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers" /></a> <a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors" /></a> </p>
+Description
 
-A minimal NestJS application for ingesting, caching, and analyzing IoT telemetry data. This project accepts JSON readings, stores them in MongoDB Atlas, caches the latest reading in Redis, and triggers a webhook alert if thresholds are exceeded.
+IoT Telemetry Ingestor is a minimal NestJS application designed to ingest, cache, and analyze IoT telemetry data. It stores JSON-based readings in MongoDB Atlas, caches the latest device state using Redis, and triggers webhook alerts when thresholds are exceeded.
 
-📋 Features
+Features
 
-Ingest API: Validates and stores telemetry data (Temperature/Humidity).
+Telemetry Ingestion: Validates and stores temperature/humidity readings.
 
-Real-time Alerts: Triggers a webhook alert if temperature > 50 or humidity > 90.
+Real-time Alerts: Triggered when temperature > 50°C or humidity > 90.
 
-Caching Strategy: Uses Redis to cache the "latest" device state for instant retrieval.
+Redis Caching: Stores the latest device state for fast retrieval.
 
-Analytics: Uses MongoDB Aggregation Pipeline for site summaries (min, max, avg, unique devices).
+MongoDB Analytics: Provides site summaries (min, max, avg, unique devices) using aggregation pipelines.
 
-🚀 Setup & Installation
-
+Setup & Installation
 1. Prerequisites
 
-Node.js (v18 or later)
+Node.js v18+
 
-npm (Node Package Manager)
+npm
+
+MongoDB Atlas
+
+Redis Cloud or local Redis
 
 2. Install Dependencies
-
 npm install
-
 
 3. Environment Configuration
 
-Create a .env file in the root directory. You can copy the structure from .env.example:
+Create a .env file:
 
 cp .env.example .env
 
 
-Required Variables:
+Fill in values:
 
-*MongoDB Atlas Connection String
-MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/iot_db?retryWrites=true&w=majority
-
-*Redis Connection (Local or Cloud)
-Example: redis://default:<password>@<endpoint>:<port>
-REDIS_URL=redis://localhost:6379
-
-*Webhook for Alerts
-Generate a unique URL at [https://webhook.site/](https://webhook.site/)
-ALERT_WEBHOOK_URL=[https://webhook.site/YOUR-UNIQUE-UUID](https://webhook.site/YOUR-UNIQUE-UUID)
-
-App Config
+MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/iot_db
+REDIS_URL=redis://default:<password>@<host>:<port>
+ALERT_WEBHOOK_URL=https://webhook.site/c861c10b-cd77-454b-abe1-963542cc46d3
 PORT=3000
 
-
-4. Running the Application
-
-# Development mode
+4. Run Application
 npm run start:dev
 
-
-5. Running Tests
-
-# Unit tests
+5. Tests
 npm run test
-
-# End-to-End (E2E) tests
 npm run test:e2e
 
-
-🔗 Cloud Services & Architecture Notes
-
+Cloud Services Overview
 MongoDB Atlas
 
-This project uses a free MongoDB Atlas (M0) cluster for persistent storage.
+Stores telemetry readings.
 
-Connection: Standard Node.js driver via Mongoose.
+Connected using Mongoose.
 
-Access: Network access is configured to allow connections from the application IP.
+Works on free-tier clusters.
 
 Redis Cloud
 
-Redis is hosted via Redis Cloud (Free Tier) to meet the caching requirement without requiring local installation.
+Caches latest device state.
 
-Connection: Authenticated via ioredis using the secure connection string in .env.
+Connected using ioredis and secure Redis URL.
 
 Webhook Alerts
 
-Alerts for high temperature/humidity are sent to a unique testing URL.
+Alerts sent when temperature/humidity thresholds are exceeded.
 
-Service: Webhook.site
+Uses Webhook.site for testing.
 
-My Unique URL: https://webhook.site/<YOUR-UUID-HERE> (Replace this with your actual URL or leave as placeholder)
-
-Trigger: Alerts are sent when temp > 50 or humidity > 90.
-
-🧪 Quick Verification
-
-You can test the API using standard curl or Postman.
-
-1. Ingest Data (Happy Path)
-This should trigger an alert because Temperature (55) > 50.
-
+API Quick Testing
+1. Ingest Data (Triggers alert because temp=55 > 50)
 curl -X POST http://localhost:3000/api/v1/telemetry \
   -H "Content-Type: application/json" \
   -d '{"deviceId":"dev-001","siteId":"site-A","ts":"2025-09-01T10:00:00.000Z","metrics":{"temperature":55,"humidity":40}}'
 
-
-2. Get Latest Device Status (Cache Hit)
-Fetches the data immediately from Redis.
-
+2. Get Latest Device Status (Redis)
 curl http://localhost:3000/api/v1/devices/dev-001/latest
 
-
 3. Get Site Summary (Aggregation)
-Calculates averages and counts unique devices for a specific date range.
-
 curl "http://localhost:3000/api/v1/sites/site-A/summary?from=2025-09-01T00:00:00.000Z&to=2025-09-02T00:00:00.000Z"
 
+AI Assistance Report (Required for Assignment)
 
-🤖 AI Usage Report
+1. AI was used to generate the initial NestJS boilerplate (modules, controllers, services, DTOs), which was then manually reviewed and adjusted.
 
-As per the assignment guidelines, here is how AI assistance was utilized in this project:
+2. AI assisted in crafting the MongoDB aggregation pipeline used in /sites/:siteId/summary, including statistical operators and unique device counting.
 
-1. I used AI to generate the initial NestJS boilerplate (Module, Controller, Service, DTOs) to accelerate the setup phase. I reviewed the generated code to ensure it matched the required file structure.
+3. AI helped resolve TypeScript strict-mode issues such as Redis typing, null-checks, and error handling.
 
-2. I used AI to construct the MongoDB Aggregation Pipeline for the /sites/:siteId/summary endpoint, specifically for correctly calculating averages and counting unique devices using $group and $addToSet.
-
-3. I leveraged AI to resolve TypeScript strict mode errors, specifically regarding ioredis configuration (getOrThrow usage) and null-checks for the alert logic variables.
-
-4. Test Generation: Due to limited experience with testing frameworks, I utilized AI to generate the initial Unit and E2E test suites and explain
+4. AI generated initial unit and E2E test templates and explained the mocking strategy for Redis and MongoDB.
