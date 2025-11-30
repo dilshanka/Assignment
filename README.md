@@ -23,76 +23,130 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+IoT Telemetry Ingestor
 
-## Project setup
+A minimal NestJS application for ingesting, caching, and analyzing IoT telemetry data. This project accepts JSON readings, stores them in MongoDB Atlas, caches the latest reading in Redis, and triggers a webhook alert if thresholds are exceeded.
 
-```bash
-$ npm install
-```
+ Features
 
-## Compile and run the project
+Ingest API: Validates and stores telemetry data (Temperature/Humidity).
 
-```bash
-# development
-$ npm run start
+Real-time Alerts: Triggers a webhook alert if temperature > 50 or humidity > 90.
 
-# watch mode
-$ npm run start:dev
+Caching Strategy: Uses Redis to cache the "latest" device state for instant retrieval.
 
-# production mode
-$ npm run start:prod
-```
+Analytics: Uses MongoDB Aggregation Pipeline for site summaries (min, max, avg, unique devices).
 
-## Run tests
+ Setup & Installation
 
-```bash
-# unit tests
-$ npm run test
+1. Prerequisites
 
-# e2e tests
-$ npm run test:e2e
+Node.js 
 
-# test coverage
-$ npm run test:cov
-```
+npm (Node Package Manager)
 
-## Deployment
+2. Install Dependencies
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+npm install
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+3. Environment Configuration
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Create a .env file in the root directory. You can copy the structure from .env.example:
 
-## Resources
+cp .env.example .env
 
-Check out a few resources that may come in handy when working with NestJS:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Required Variables:
 
-## Support
+# MongoDB Atlas Connection String
+MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/iot_db?retryWrites=true&w=majority
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Redis Connection (Local or Cloud)
+# Example: redis://default:<password>@<endpoint>:<port>
+REDIS_URL=redis://localhost:6379
 
-## Stay in touch
+# Webhook for Alerts
+# Generate a unique URL at [https://webhook.site/](https://webhook.site/)
+ALERT_WEBHOOK_URL=[https://webhook.site/YOUR-UNIQUE-UUID](https://webhook.site/YOUR-UNIQUE-UUID)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# App Config
+PORT=3000
 
-## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+4. Running the Application
+
+# Development mode
+npm run start:dev
+
+
+5. Running Tests
+
+# Unit tests
+npm run test
+
+# End-to-End (E2E) tests
+npm run test:e2e
+
+
+ Cloud Services & Architecture Notes
+
+MongoDB Atlas
+
+This project uses a free MongoDB Atlas (M0) cluster for persistent storage.
+
+Connection: Standard Node.js driver via Mongoose.
+
+Access: Network access is configured to allow connections from the application IP.
+
+Redis Cloud
+
+Redis is hosted via Redis Cloud (Free Tier) to meet the caching requirement without requiring local installation.
+
+Connection: Authenticated via ioredis using the secure connection string in .env.
+
+Webhook Alerts
+
+Alerts for high temperature/humidity are sent to a unique testing URL.
+
+Service: Webhook.site
+
+My Unique URL: https://webhook.site/<YOUR-UUID-HERE> (Replace this with your actual URL or leave as placeholder)
+
+Trigger: Alerts are sent when temp > 50 or humidity > 90.
+
+🧪 Quick Verification
+
+You can test the API using standard curl or Postman.
+
+1. Ingest Data (Happy Path)
+This should trigger an alert because Temperature (55) > 50.
+
+curl -X POST http://localhost:3000/api/v1/telemetry \
+  -H "Content-Type: application/json" \
+  -d '{"deviceId":"dev-001","siteId":"site-A","ts":"2025-09-01T10:00:00.000Z","metrics":{"temperature":55,"humidity":40}}'
+
+
+2. Get Latest Device Status (Cache Hit)
+Fetches the data immediately from Redis.
+
+curl http://localhost:3000/api/v1/devices/dev-001/latest
+
+
+3. Get Site Summary (Aggregation)
+Calculates averages and counts unique devices for a specific date range.
+
+curl "http://localhost:3000/api/v1/sites/site-A/summary?from=2025-09-01T00:00:00.000Z&to=2025-09-02T00:00:00.000Z"
+
+
+AI Usage Report
+
+As per the assignment guidelines, here is how AI assistance was utilized in this project:
+
+I used AI to generate the initial NestJS boilerplate (Module, Controller, Service, DTOs) to accelerate the setup phase.
+
+I used AI to construct the MongoDB Aggregation Pipeline for the /sites/:siteId/summary endpoint, specifically for correctly calculating averages and counting unique devices using $group and $addToSet.
+
+I leveraged AI to resolve TypeScript strict mode errors, specifically regarding ioredis configuration (getOrThrow usage) and null-checks for the alert logic variables.
+
+Test Generation: Due to limited experience with testing frameworks, I utilized AI to generate the initial Unit and E2E test suites and explain the testing logic.

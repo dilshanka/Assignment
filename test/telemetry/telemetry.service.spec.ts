@@ -4,7 +4,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Telemetry } from '../../src/telemetry/schemas/telemetry.schema';
 import { Model } from 'mongoose';
 
-// Mock the Redis client if necessary
+
 import { ConfigService } from '@nestjs/config';
 
 describe('TelemetryService', () => {
@@ -18,8 +18,8 @@ describe('TelemetryService', () => {
         {
           provide: getModelToken(Telemetry.name),
           useValue: {
-            save: jest.fn().mockResolvedValueOnce(null),  // Mocking the save method
-            findOne: jest.fn().mockResolvedValue(null),   // Mocking the findOne method
+            save: jest.fn().mockResolvedValueOnce(null),  
+            findOne: jest.fn().mockResolvedValue(null),   
           },
         },
         {
@@ -47,7 +47,7 @@ describe('TelemetryService', () => {
       metrics: { temperature: 55, humidity: 80 },
     };
 
-    // Mock save method on model
+  
     const saveSpy = jest.spyOn(model.prototype, 'save').mockResolvedValueOnce(null);
 
     await service.saveToMongo(telemetryDTO);

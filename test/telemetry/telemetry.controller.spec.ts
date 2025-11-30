@@ -1,9 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TelemetryController } from '../../src/telemetry/telemetry.controller';
 import { TelemetryService } from '../../src/telemetry/telemetry.service';
-import { TelemetryModule } from '../../src/telemetry/telemetry.module';
-
-// Mock ConfigService if needed
 import { ConfigService } from '@nestjs/config';
 
 describe('TelemetryController', () => {
@@ -12,12 +9,12 @@ describe('TelemetryController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [TelemetryModule],  // Import TelemetryModule to provide the controller
       providers: [
+        TelemetryController, 
         {
           provide: TelemetryService,
           useValue: {
-            saveToMongo: jest.fn(),
+            saveToMongo: jest.fn(), 
             saveToRedis: jest.fn(),
             triggerAlert: jest.fn(),
             getFromRedis: jest.fn(),
@@ -49,10 +46,13 @@ describe('TelemetryController', () => {
       metrics: { temperature: 55, humidity: 80 },
     };
 
-    const saveToMongoSpy = jest.spyOn(service, 'saveToMongo').mockResolvedValueOnce(undefined);
+   
+    const saveToMongoMock = service.saveToMongo as jest.Mock;
+    saveToMongoMock.mockResolvedValueOnce(undefined);
 
     await controller.ingestTelemetry(telemetryDTO);
 
-    expect(saveToMongoSpy).toHaveBeenCalled();
+   
+    expect(saveToMongoMock).toHaveBeenCalledWith(telemetryDTO);
   });
 });
