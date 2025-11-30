@@ -1,93 +1,121 @@
-IoT Telemetry Ingestor
-<p align="center"> <a href="https://nestjs.com" target="_blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a> </p> <p align="center"> A progressive <a href="https://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications. </p> <p align="center"> <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a> <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a> <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a> <a href="https://circleci.com/gh/nestjs/nest"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a> <a href="https://discord.gg/G7Qnnhy"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord" /></a> <a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers" /></a> <a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors" /></a> </p>
-Description
+# IoT Telemetry Ingestor
 
-IoT Telemetry Ingestor is a minimal NestJS application designed to ingest, cache, and analyze IoT telemetry data. It stores JSON-based readings in MongoDB Atlas, caches the latest device state using Redis, and triggers webhook alerts when thresholds are exceeded.
+A minimal NestJS application designed to ingest, cache, and analyze IoT telemetry data.
 
-Features
+---
 
-Telemetry Ingestion: Validates and stores temperature/humidity readings.
+##  Description
 
-Real-time Alerts: Triggered when temperature > 50°C or humidity > 90.
+IoT Telemetry Ingestor stores JSON-based IoT readings in MongoDB Atlas, caches the latest device state using Redis, and triggers webhook alerts when temperature or humidity thresholds are exceeded.
 
-Redis Caching: Stores the latest device state for fast retrieval.
+---
 
-MongoDB Analytics: Provides site summaries (min, max, avg, unique devices) using aggregation pipelines.
+##  Features
 
-Setup & Installation
-1. Prerequisites
+- **Telemetry Ingestion** – Validates & stores temperature/humidity readings  
+- **Real-time Alerts** – Alerts when **temperature > 50°C** or **humidity > 90%**  
+- **Redis Caching** – Caches latest device state for fast access  
+- **MongoDB Analytics** – Aggregation pipelines for min/max/avg & unique device count  
 
-Node.js v18+
+---
 
-npm
+##  Setup & Installation
 
-MongoDB Atlas
+### **Prerequisites**
+- Node.js v18+
+- npm
+- MongoDB Atlas
+- Redis Cloud or Local Redis
 
-Redis Cloud or local Redis
-
-2. Install Dependencies
+### **Install Dependencies**
+```bash
 npm install
+```
 
-3. Environment Configuration
+---
 
-Create a .env file:
+##  Environment Configuration
 
+Create `.env`:
+
+```bash
 cp .env.example .env
+```
 
+Fill required values:
 
-Fill in values:
-
-MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/iot_db
+```env
+MONGO_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/iot_db
 REDIS_URL=redis://default:<password>@<host>:<port>
 ALERT_WEBHOOK_URL=https://webhook.site/c861c10b-cd77-454b-abe1-963542cc46d3
 PORT=3000
+```
 
-4. Run Application
+---
+
+##  Run Application
+
+```bash
 npm run start:dev
+```
 
-5. Tests
+---
+
+##  Tests
+
+```bash
 npm run test
 npm run test:e2e
+```
 
-Cloud Services Overview
-MongoDB Atlas
+---
 
-Stores telemetry readings.
+##  Cloud Services Overview
 
-Connected using Mongoose.
+### **MongoDB Atlas**
+- Stores telemetry readings  
+- Connected via Mongoose  
+- Works on free-tier  
 
-Works on free-tier clusters.
+### **Redis Cloud**
+- Stores latest device cache  
+- Uses `ioredis` with secure URL  
 
-Redis Cloud
+### **Webhook Alerts**
+- Triggered when thresholds exceed  
+- Uses Webhook.site for testing  
 
-Caches latest device state.
+---
 
-Connected using ioredis and secure Redis URL.
+##  API Quick Testing
 
-Webhook Alerts
+### **1. Ingest Data** (Triggers alert — temp 55 > 50)
 
-Alerts sent when temperature/humidity thresholds are exceeded.
-
-Uses Webhook.site for testing.
-
-API Quick Testing
-1. Ingest Data (Triggers alert because temp=55 > 50)
+```bash
 curl -X POST http://localhost:3000/api/v1/telemetry \
   -H "Content-Type: application/json" \
   -d '{"deviceId":"dev-001","siteId":"site-A","ts":"2025-09-01T10:00:00.000Z","metrics":{"temperature":55,"humidity":40}}'
+```
 
-2. Get Latest Device Status (Redis)
+### **2. Get Latest Device Status (Redis)**
+
+```bash
 curl http://localhost:3000/api/v1/devices/dev-001/latest
+```
 
-3. Get Site Summary (Aggregation)
+### **3. Get Site Summary (Aggregation)**
+
+```bash
 curl "http://localhost:3000/api/v1/sites/site-A/summary?from=2025-09-01T00:00:00.000Z&to=2025-09-02T00:00:00.000Z"
+```
 
-AI Assistance Report (Required for Assignment)
+---
 
-1. AI was used to generate the initial NestJS boilerplate (modules, controllers, services, DTOs), which was then manually reviewed and adjusted.
+##  AI Assistance Report (Required for Assignment)
 
-2. AI assisted in crafting the MongoDB aggregation pipeline used in /sites/:siteId/summary, including statistical operators and unique device counting.
+- AI generated initial NestJS boilerplate (modules, controllers, services, DTOs).  
+- AI helped build MongoDB aggregation pipelines for `/sites/:siteId/summary`.  
+- AI assisted resolving TypeScript strict-mode issues (Redis typing, null checks, error handling).  
+- AI created initial unit and E2E test templates and explained mocking strategies.  
 
-3. AI helped resolve TypeScript strict-mode issues such as Redis typing, null-checks, and error handling.
-
-4. AI generated initial unit and E2E test templates and explained the mocking strategy for Redis and MongoDB.
+---
