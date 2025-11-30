@@ -111,7 +111,7 @@ curl "http://localhost:3000/api/v1/sites/site-A/summary?from=2025-09-01T00:00:00
 
 ---
 
-##  AI Assistance Report (Required for Assignment)
+##  AI Assistance Report 
 
 - AI generated initial NestJS boilerplate (modules, controllers, services, DTOs).  
 - AI helped build MongoDB aggregation pipelines for `/sites/:siteId/summary`.  
